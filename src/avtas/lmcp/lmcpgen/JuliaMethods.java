@@ -60,7 +60,7 @@ public class JuliaMethods {
         for (DependencyContainer dc : missingDependencies) {
             StructInfo si = dc.structInfo;
             
-            if (!si.extends_name.isBlank()) { //check dependencies on interfaces
+            if (!si.extends_name.isEmpty()) { //check dependencies on interfaces
                 DependencyContainer extendsStruct = dc.find(missingDependencies, si.extends_name, si.extends_series);
                 dc.dependencies.add(extendsStruct);
                 //System.out.println(String.format("%s depends on %s", si.name, extendsStruct.structInfo.name));
@@ -96,14 +96,11 @@ public class JuliaMethods {
         return ws + st.name;
     }
     
-    public static String extends_check(MDMInfo[] infos, MDMInfo info, final File outfile, StructInfo st, EnumInfo en, String ws) throws Exception {
-        return ws + (st.extends_name.isBlank() ? "LMCP.LmcpBase" : st.extends_name);
-    }
     public static String extends_impl(MDMInfo[] infos, MDMInfo info, final File outfile, StructInfo st, EnumInfo en, String ws) throws Exception {
-        return ws + (st.extends_name.isBlank() ? "LmcpMessage" : st.extends_name);
+        return ws + (st.extends_name.isEmpty() ? "LmcpMessage" : st.extends_name);
     }
     public static String extends_series(MDMInfo[] infos, MDMInfo info, final File outfile, StructInfo st, EnumInfo en, String ws) throws Exception {
-        return ws + (st.extends_name.isBlank() ? "LMCP." : st.extends_series + ".");
+        return ws + (st.extends_name.isEmpty() ? "LMCP." : st.extends_series + ".");
     }
         
     public static String list_imports(MDMInfo[] infos, MDMInfo info, final File outfile, StructInfo st, EnumInfo en, String ws) throws Exception {
@@ -327,7 +324,7 @@ public class JuliaMethods {
             else {
                 str += ws + name + "::" + type;
                 String defaultVal = f.defaultVal;
-                if (defaultVal.isBlank()) {
+                if (defaultVal.isEmpty()) {
                     defaultVal = getDefaultValue(f.type);
                 }
             }
@@ -539,12 +536,12 @@ public class JuliaMethods {
             }
             else if (f.type.equalsIgnoreCase("string")) {
                 str += ws + name + "::" + type;
-                str += " = " + (f.defaultVal.isBlank() ? "\"\"" : "\"" + f.defaultVal + "\"");
+                str += " = " + (f.defaultVal.isEmpty() ? "\"\"" : "\"" + f.defaultVal + "\"");
             }
             else {
                 str += ws + name + "::" + type;
                 String defaultVal = f.defaultVal;
-                if (defaultVal.isBlank()) {
+                if (defaultVal.isEmpty()) {
                     defaultVal = getDefaultValue(f.type);
                 }
                 str += " = " + type + "(" + defaultVal + ")";
